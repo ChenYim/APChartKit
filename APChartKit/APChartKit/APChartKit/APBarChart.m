@@ -40,6 +40,9 @@
 // barShapeLayer
 @property (nonatomic, strong) CAShapeLayer *barShapeLayer;
 @property (nonatomic, strong) CAShapeLayer *barShadowShapeLayer;
+
+@property (nonatomic, strong) UILabel *dotMarkLabel;
+@property (nonatomic, strong) CAGradientLayer *dotMarkLabelGradientLayer;
 @end
 
 @implementation APSingleChartBar
@@ -54,6 +57,14 @@
 - (void)startBarAnimation
 {
     self.barShapeLayer.lineWidth = _barWidth;
+    if (_dotMarkLabel) {
+        [_dotMarkLabel removeFromSuperview];
+        _dotMarkLabel = nil;
+    }
+    if (_dotMarkLabelGradientLayer) {
+         [_dotMarkLabelGradientLayer removeFromSuperlayer];
+        _dotMarkLabelGradientLayer = nil;
+    }
     
     // 设置动画的相关属性
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -152,25 +163,24 @@
 
 - (void)drawDotMarkStr
 {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.font = _dotMarkFont ? _dotMarkFont : [UIFont systemFontOfSize:10.0];
-    label.text = _dotMarkStr;
-    [label sizeToFit];
+    self.dotMarkLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.dotMarkLabel.font = _dotMarkFont ? _dotMarkFont : [UIFont systemFontOfSize:10.0];
+    self.dotMarkLabel.text = _dotMarkStr;
+    [self.dotMarkLabel sizeToFit];
     
     CGFloat contentH = self.frame.size.height - APBarChartContentMargin*2;
     CGFloat barTopY = APBarChartContentMargin + contentH*(1-_barValue);
-    label.center = CGPointMake(_barOffsetX + _barWidth/2, barTopY - CGRectGetHeight(label.frame)/2 - APBarChartDotMarkMargin);
-    [self addSubview:label];
+    self.dotMarkLabel.center = CGPointMake(_barOffsetX + _barWidth/2, barTopY - CGRectGetHeight(_dotMarkLabel.frame)/2 - APBarChartDotMarkMargin);
+    [self addSubview:_dotMarkLabel];
     
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.startPoint = CGPointMake(0, 0.0);
-    gradientLayer.endPoint = CGPointMake(1.0, 0.0);
-    gradientLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    gradientLayer.colors = [self getGradientLayerColorFromDataSource:_dotMarkColor];
-
-    [self.layer addSublayer:gradientLayer];
-    gradientLayer.mask = label.layer;
-    //    label.frame = gradientLayer.bounds
+    self.dotMarkLabelGradientLayer = [CAGradientLayer layer];
+    self.dotMarkLabelGradientLayer.startPoint = CGPointMake(0, 0.0);
+    self.dotMarkLabelGradientLayer.endPoint = CGPointMake(1.0, 0.0);
+    self.dotMarkLabelGradientLayer.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    self.dotMarkLabelGradientLayer.colors = [self getGradientLayerColorFromDataSource:_dotMarkColor];
+    self.dotMarkLabelGradientLayer.mask = _dotMarkLabel.layer;
+    
+    [self.layer addSublayer:_dotMarkLabelGradientLayer];
 }
 
 - (NSArray *)getGradientLayerColorFromDataSource:(id)color
@@ -202,6 +212,7 @@
 
 @interface APBarChart()
 @property (nonatomic, strong) NSArray <NSNumber*> *      dataModels;
+@property (nonatomic, assign) CGFloat                    contentMargin; // default: 0.0 (if contentMargin is 0.0, there will be no coordinateSystem)
 @property (nonatomic, strong) NSMutableArray             *barColors;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *barWidths;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *spaceIntervals;
@@ -257,14 +268,16 @@
 
 - (void)startBarAnimations
 {
-    for (APSingleChartBar *bar in _barViews) {
-        [bar startBarAnimation];
-    }
+    [_barViews enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        APSingleChartBar *barChart = obj;
+        [barChart.barGradientLayer removeAllAnimations];
+        [barChart startBarAnimation];
+    }];
 }
 
 -(void)drawRect:(CGRect)rect
 {
-    if (_verticalTitles.count == 0 || _horizontalTitles.count == 0) {
+    if (_verticalTitles.count == 0 || _horizontalTitles.count == 0 || _contentMargin == 0.0) {
         return;
     }
     
@@ -334,6 +347,7 @@
     
     // init vars from dataSource
     self.dataModels = [self requestDataModelsForBarChart];
+    self.contentMargin = [self requestContentMarginForBarChart];
     self.horizontalTitles = [self requestTitlesForHorizontalAxis];
     self.verticalTitles = [self requestTitlesForVerticalAxis];
     
@@ -448,6 +462,16 @@
         dataModels = [self.dataSource dataModelsForBarChart:self];
     }
     return dataModels;
+}
+
+- (CGFloat)requestContentMarginForBarChart
+{
+    CGFloat contentMargin = 0.0;
+    if ([self.dataSource respondsToSelector:@selector(contentMarginForBarChart:)])
+    {
+        contentMargin = [self.dataSource contentMarginForBarChart:self];
+    }
+    return contentMargin;
 }
 
 // barColor

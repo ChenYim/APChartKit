@@ -228,6 +228,7 @@
         APSinglePieChart *singlePieChart = obj;
         singlePieChart.gradientPieLayer.hidden = YES;
         singlePieChart.markStrLabel.hidden = YES;
+        [singlePieChart.gradientPieLayer removeAllAnimations];
     }];
     
     APSinglePieChart *firstPieChart = [_pieViews firstObject];

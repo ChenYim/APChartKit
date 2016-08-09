@@ -134,10 +134,44 @@
 - (void)startRadarAnimation
 {
     for (APRadarPolygon *radarPolygon in _radarPolygonViews) {
-        [radarPolygon removeFromSuperview];
+        [radarPolygon.gradientLayer removeAllAnimations];
+        [radarPolygon startAnimation];
     }
+}
+
+#pragma mark - Private Method
+- (void)setup
+{
+    // load datas
+    self.dataModels           = [self requestDataModelsForRadarChart];
+    self.numOfDirection       = [_dataModels count];
+    self.numOfDirectionMark   = [self requestNumberOfDirectionMarkForRadarChart];
+    self.directionRangeLength = [self requestradiusOfDirectionForRadarChart];
     
-    // radarPolygonView
+    NSMutableArray *temp_Titles = [NSMutableArray new];
+    NSMutableArray *temp_TitleColors = [NSMutableArray new];
+    NSMutableArray *temp_TitleFonts = [NSMutableArray new];
+    for (NSInteger i = 0 ; i < _numOfDirection ;i++) {
+        [temp_Titles addObject:[self requestTitleAtDirectionIndex:i]];
+        [temp_TitleColors addObject:[self requestTitleColorAtDirectionIndex:i]];
+        [temp_TitleFonts addObject:[self requestTitleFontAtDirectionIndex:i]];
+    }
+    self.titlesAtEachDirection = [temp_Titles copy];
+    self.titleColorAtEachDirection = [temp_TitleColors copy];
+    self.titleFontAtEachDirection = [temp_TitleFonts copy];
+    
+    CGFloat angleOffset = M_PI*2/_numOfDirection;
+    NSMutableArray *temp_Angles = [NSMutableArray new];
+    for (NSInteger i = 0 ; i < _numOfDirection ;i++) {
+        [temp_Angles addObject:@(APRadarChartOriginStartAngle + angleOffset * i)];
+    }
+    self.anglesAtEachDirection = [temp_Angles copy];
+    
+    // draw titles and mapLines
+    [self setupDirectionTitles];
+    [self setNeedsDisplay];
+    
+    // draw radarPolygonView
     UIBezierPath *bezierPathOfRadarPolygon = [UIBezierPath bezierPath];
     bezierPathOfRadarPolygon.lineWidth = 0.0;
     for (NSInteger i = 0 ; i < _numOfDirection ;i++)
@@ -167,41 +201,6 @@
     [radarPolygonView setupPolygonLayer];
     [self addSubview:radarPolygonView];
     [self.radarPolygonViews addObject:radarPolygonView];
-    
-    for (APRadarPolygon *radarPolygon in _radarPolygonViews) {
-        [radarPolygon startAnimation];
-    }
-}
-
-#pragma mark - Private Method
-- (void)setup
-{
-    self.dataModels           = [self requestDataModelsForRadarChart];
-    self.numOfDirection       = [_dataModels count];
-    self.numOfDirectionMark   = [self requestNumberOfDirectionMarkForRadarChart];
-    self.directionRangeLength = [self requestradiusOfDirectionForRadarChart];
-    
-    NSMutableArray *temp_Titles = [NSMutableArray new];
-    NSMutableArray *temp_TitleColors = [NSMutableArray new];
-    NSMutableArray *temp_TitleFonts = [NSMutableArray new];
-    for (NSInteger i = 0 ; i < _numOfDirection ;i++) {
-        [temp_Titles addObject:[self requestTitleAtDirectionIndex:i]];
-        [temp_TitleColors addObject:[self requestTitleColorAtDirectionIndex:i]];
-        [temp_TitleFonts addObject:[self requestTitleFontAtDirectionIndex:i]];
-    }
-    self.titlesAtEachDirection = [temp_Titles copy];
-    self.titleColorAtEachDirection = [temp_TitleColors copy];
-    self.titleFontAtEachDirection = [temp_TitleFonts copy];
-    
-    CGFloat angleOffset = M_PI*2/_numOfDirection;
-    NSMutableArray *temp_Angles = [NSMutableArray new];
-    for (NSInteger i = 0 ; i < _numOfDirection ;i++) {
-        [temp_Angles addObject:@(APRadarChartOriginStartAngle + angleOffset * i)];
-    }
-    self.anglesAtEachDirection = [temp_Angles copy];
-    
-    [self setupDirectionTitles];
-    [self setNeedsDisplay];
 }
 
 - (void)setIsTapGestureInteractionEnabled:(BOOL)isTapGestureInteractionEnabled

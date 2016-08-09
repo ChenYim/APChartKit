@@ -74,7 +74,7 @@
 
 @implementation CALayer(APChartTools)
 
-- (void)addTwinkleAnimationWithDuration:(double)duration repeatCount:(NSInteger)repeatCount
+- (CABasicAnimation *)addTwinkleAnimationWithDuration:(double)duration repeatCount:(NSInteger)repeatCount
 {
     CABasicAnimation *animation=[CABasicAnimation animationWithKeyPath:@"opacity"];
     animation.fromValue = [NSNumber numberWithFloat:1.0];
@@ -87,6 +87,8 @@
     animation.duration=duration;
     
     [self addAnimation:animation forKey:@"APTwinkleAnimation"];
+    
+    return animation;
 }
 
 @end

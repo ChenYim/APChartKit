@@ -32,16 +32,15 @@
     
     // lineChart
     self.lineChar = [[APLineChart alloc] initWithFrame:CGRectZero andDataSource:self];
-    self.lineChar.contentMargin = 12.0;
-    self.lineChar.lineChartAnimarionDuration = 3.0;
-    self.lineChar.lineChartWidth = 1.0;
-    self.lineChar.isDotMarkDrawingEnabled = YES;
-    self.lineChar.isTapGestureInteractionEnabled = YES;
+//    self.lineChar.lineChartAnimarionDuration = 3.0;
+//    self.lineChar.lineChartWidth = 1.0;
+//    self.lineChar.isDotMarkDrawingEnabled = YES;
+//    self.lineChar.isTapGestureInteractionEnabled = YES;
     [self.view addSubview:_lineChar];
     
     // barChart
     self.barChart = [[APBarChart alloc] initWithFrame:CGRectZero andDataSource:self];
-    self.barChart.contentMargin = 12.0;
+//    self.barChart.contentMargin = 12.0;
     self.barChart.markBottomMargin = 0.0;
     self.barChart.barAnimarionDuration = 3.0;
     self.barChart.isTapGestureInteractionEnabled = YES;
@@ -172,10 +171,10 @@
 #pragma mark - Event Response
 - (void)btnClick:(id)sender
 {
-    [_lineChar updateLineChartDatas];
+//    [_lineChar updateLineChartDatas];
     [_lineChar startLineAnimations];
     
-    [_barChart updateBarChartDatas];
+//    [_barChart updateBarChartDatas];
     [_barChart startBarAnimations];
     
 //    [_pieChart updatePieChartDatas];
@@ -189,6 +188,11 @@
 -(NSArray<NSArray<APLineChartDataModel *> *> *)dataModelsForLineChart:(APLineChart *)lineChart
 {
     return _lineChartDatas;
+}
+
+-(CGFloat)contentMarginForLineChart:(APLineChart *)lineChart
+{
+    return 12.0;
 }
 
 -(id)lineChart:(APLineChart *)lineChart colorForLineAtIndex:(NSInteger)lineIndex
@@ -238,10 +242,9 @@
     //    return @[@(0.0)];
 }
 
--(CGFloat)contentTopMarginForBarChart:(APBarChart *)barChart
+-(CGFloat)contentMarginForBarChart:(APBarChart *)barChart
 {
-    //    return 0.0;
-    return 20.0;
+    return 12.0;
 }
 
 -(id)barChart:(APBarChart *)barChart colorForBarAtIndex:(NSInteger)barIndex

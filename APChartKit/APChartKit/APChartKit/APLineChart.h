@@ -29,7 +29,6 @@
 @property (nonatomic, assign) CGFloat lineDotMarkTopMargin;     // default:1.0;
 @property (nonatomic, assign) CGFloat lineDotMarkBottomMargin;  // default:1.0;
 
-@property (nonatomic, assign) CGFloat contentMargin;                // default:0.0
 @property (nonatomic, assign) CGFloat lineChartAnimarionDuration;   // default:2.0
 @property (nonatomic, assign) BOOL isDotMarkDrawingEnabled;         // default:false
 @property (nonatomic, assign) BOOL isTapGestureInteractionEnabled;  // default:false
@@ -46,12 +45,14 @@
 @required
 - (NSArray <NSArray <APLineChartDataModel *> *> *)dataModelsForLineChart:(APLineChart *)lineChart;
 
+- (CGFloat)contentMarginForLineChart:(APLineChart *)lineChart;
+
 @optional
 
-/** @return UIColor |  NSArray<UIColor*>* */
+/** @return UIColor ||  NSArray<UIColor*>* */
 - (id)lineChart:(APLineChart *)lineChart colorForLineAtIndex:(NSInteger)lineIndex;
 
-/** @return UIColor |  NSArray<UIColor*>* */
+/** @return UIColor ||  NSArray<UIColor*>* */
 - (id)lineChart:(APLineChart *)lineChart colorForLineMarkAtIndex:(NSInteger)lineIndex;
 
 

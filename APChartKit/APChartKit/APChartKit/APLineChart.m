@@ -335,6 +335,7 @@
 @interface APLineChart()
 
 @property (nonatomic, strong) NSArray <NSArray <APLineChartDataModel*> *> * chartLineDataModels;
+@property (nonatomic, assign) CGFloat contentMargin;
 @property (nonatomic, strong) NSMutableArray *lineColors;
 @property (nonatomic, strong) NSMutableArray *lineDotMarkColors;
 @property (nonatomic, strong) NSMutableArray <APSingleChartLine *> *singChartLines;
@@ -387,14 +388,16 @@
 
 - (void)startLineAnimations
 {
-    for (APSingleChartLine *line in _singChartLines) {
-        [line startDrawlineChart];
-    }
+    [_singChartLines enumerateObjectsUsingBlock:^(APSingleChartLine * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        APSingleChartLine *lineChart = obj;
+        [lineChart.gradientLineLayer removeAllAnimations];
+        [lineChart startDrawlineChart];
+    }];
 }
 
 -(void)drawRect:(CGRect)rect
 {
-    if (_verticalTitles.count == 0 || _horizontalTitles.count == 0) {
+    if (_verticalTitles.count == 0 || _horizontalTitles.count == 0 || _contentMargin == 0.0) {
         return;
     }
     
@@ -469,6 +472,7 @@
     }];
     
     self.chartLineDataModels = [self requestDataModelsForLineChart];
+    self.contentMargin       = [self requestContentMarginForLineChart];
     self.horizontalTitles    = [self requestTitlesForHorizontalAxis];
     self.verticalTitles      = [self requestTitlesForVerticalAxis];
     
@@ -555,6 +559,16 @@
         dataModels = [self.dataSource dataModelsForLineChart:self];
     }
     return dataModels;
+}
+
+- (CGFloat)requestContentMarginForLineChart
+{
+     CGFloat contentMargin = 0.0;
+    if ([self.dataSource respondsToSelector:@selector(contentMarginForLineChart:)])
+    {
+        contentMargin = [self.dataSource contentMarginForLineChart:self];
+    }
+    return contentMargin;
 }
 
 - (id)requestColorForLineAtIndex:(NSInteger)lineIndex

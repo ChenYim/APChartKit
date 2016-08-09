@@ -21,6 +21,6 @@
 
 @interface CALayer(APChartTools)
 
-- (void)addTwinkleAnimationWithDuration:(double)duration repeatCount:(NSInteger)repeatCount;
+- (CABasicAnimation *)addTwinkleAnimationWithDuration:(double)duration repeatCount:(NSInteger)repeatCount;
 
 @end

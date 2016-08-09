@@ -18,7 +18,6 @@
 @property (nonatomic, assign) CGFloat coordinateMarkRightMargin;// default:3.0
 @property (nonatomic, assign) CGFloat coordinateMarkTopMargin;  // default:3.0
 
-@property (nonatomic, assign) CGFloat contentMargin;                // default:0.0 (if contentMargin is 0.0, there will be no coordinateSystem)
 @property (nonatomic, assign) CGFloat markBottomMargin;             // default:0.0
 
 // special effect
@@ -39,6 +38,7 @@
 
 @required
 - (NSArray <NSNumber*>*)dataModelsForBarChart:(APBarChart *)barChart; // Number : 0.0 ~ 1.0
+- (CGFloat)contentMarginForBarChart:(APBarChart *)barChart;
 
 @optional
 // bar ==================
