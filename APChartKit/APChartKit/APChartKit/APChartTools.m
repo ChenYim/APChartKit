@@ -81,7 +81,7 @@
     animation.toValue   = [NSNumber numberWithFloat:0.0];
     animation.autoreverses        = YES;
     animation.repeatCount         = FLT_MAX;
-    animation.removedOnCompletion = NO;
+    animation.removedOnCompletion = YES;
     animation.fillMode            = kCAFillModeForwards;
     animation.repeatCount = repeatCount <= -1 ? HUGE_VALF:repeatCount;
     animation.duration=duration;

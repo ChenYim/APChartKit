@@ -10,12 +10,13 @@
 
 #import "APChartKit.h"
 
-@interface ViewController ()<APLineChartDataSource,APBarChartDataSource,APPieChartDataSource>
+@interface ViewController ()<APLineChartDataSource,APBarChartDataSource,APPieChartDataSource,APRadarChartDataSource>
 
 @property (nonatomic, strong) NSArray<NSArray<APLineChartDataModel*>*> * lineChartDatas;
 @property (nonatomic, strong) APLineChart *lineChar;
 @property (nonatomic, strong) APBarChart  *barChart;
 @property (nonatomic, strong) APPieChart  *pieChart;
+@property (nonatomic, strong) APRadarChart  *radarChart;
 @property (nonatomic, strong) UIButton *updateAnimationBtn;
 
 @end
@@ -44,6 +45,7 @@
     self.barChart.markBottomMargin = 0.0;
     self.barChart.barAnimarionDuration = 3.0;
     self.barChart.isTapGestureInteractionEnabled = YES;
+//    self.barChart.barShadowColor = [UIColor grayColor];
     [self.view addSubview:_barChart];
     
     // pieChart
@@ -52,6 +54,13 @@
     self.pieChart.pieWidth = 70;
     self.pieChart.isTapGestureInteractionEnabled = YES;
     [self.view addSubview:_pieChart];
+    
+    // radarChart
+    self.radarChart = [[APRadarChart alloc] initWithFrame:CGRectZero andDataSource:self];
+    self.radarChart.isTapGestureInteractionEnabled = YES;
+    self.radarChart.originStartAngle = (M_PI_2/3*2 * -1);
+    [self.view addSubview:_radarChart];
+    
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitleColor:APColor_DeepGreen forState:UIControlStateNormal];
@@ -67,6 +76,15 @@
     //    _barChart.layer.borderColor = [UIColor redColor].CGColor;
     //    _pieChart.layer.borderWidth = 1.0;
     //    _pieChart.layer.borderColor = [UIColor redColor].CGColor;
+    //    _radarChart.layer.borderWidth = 1.0;
+    //    _radarChart.layer.borderColor = [UIColor redColor].CGColor;
+    
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewWillLayoutSubviews
@@ -79,6 +97,7 @@
     _lineChar.frame = CGRectMake(separateMargin, 150, (frameW - separateMargin * 3)*0.5, (frameW - separateMargin * 3)*0.5);
     _barChart.frame = CGRectMake(frameW*0.5 + separateMargin*0.5, 150, (frameW - separateMargin * 3)*0.5, (frameW - separateMargin * 3)*0.5);
     _pieChart.frame = CGRectMake(separateMargin, CGRectGetMaxY(_lineChar.frame) + separateMargin, (frameW - separateMargin * 3)*0.5, (frameW - separateMargin * 3)*0.5);
+    _radarChart.frame = CGRectMake(frameW*0.5 + separateMargin*0.5, CGRectGetMaxY(_lineChar.frame) + separateMargin, (frameW - separateMargin * 3)*0.5, (frameW - separateMargin * 3)*0.5);
     _updateAnimationBtn.frame = CGRectMake(50, CGRectGetMaxY(_pieChart.frame)+separateMargin, CGRectGetWidth(_updateAnimationBtn.frame), CGRectGetHeight(_updateAnimationBtn.frame));
 }
 
@@ -86,22 +105,30 @@
 {
     [super viewDidAppear:animated];
     
+    [self updateAllChartDatas];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [_lineChar updateLineChartDatas];
+            
             [_lineChar startLineAnimations];
-            
-            [_barChart updateBarChartDatas];
             [_barChart startBarAnimations];
-            
-            [_pieChart updatePieChartDatas];
             [_pieChart startPieAnimations];
+            [_radarChart startRadarAnimation];
         });
     });
 }
 
 #pragma mark - Private Method
+
+- (void)updateAllChartDatas
+{
+    [_lineChar updateLineChartDatas];
+    [_barChart updateBarChartDatas];
+    [_pieChart updatePieChartDatas];
+    [_radarChart updateRadarChartDatas];
+}
+
 - (void)setupLineChartViewDatas
 {
     _lineChartDatas = @[
@@ -142,7 +169,7 @@
                         ];
 }
 
-#pragma mark - IBAction
+#pragma mark - Event Response
 - (void)btnClick:(id)sender
 {
     [_lineChar updateLineChartDatas];
@@ -151,8 +178,11 @@
     [_barChart updateBarChartDatas];
     [_barChart startBarAnimations];
     
-    [_pieChart updatePieChartDatas];
+//    [_pieChart updatePieChartDatas];
     [_pieChart startPieAnimations];
+    
+//    [_radarChart updateRadarChartDatas];
+    [_radarChart startRadarAnimation];
 }
 
 #pragma mark - APLineChartDataSource
@@ -279,4 +309,35 @@
     return [UIColor whiteColor];
 }
 
+#pragma mark - APRadarChartDataSource
+
+-(NSArray<NSNumber *> *)dataModelsForRadarChart:(APRadarChart *)radarChart
+{
+    return @[@(0.5), @(0.6), @(0.4), @(0.9), @(0.5)];
+}
+
+-(NSInteger)numberOfDirectionMarkForRadarChart:(APRadarChart *)radarChart
+{
+    return 8;
+}
+
+-(CGFloat)radiusOfDirectionForRadarChart:(APRadarChart *)radarChart
+{
+    return 80;
+}
+
+-(NSString *)radarChart:(APRadarChart *)radarChart titleAtDirectionIndex:(NSInteger)directionIndex
+{
+    return [@[@"Math", @"Math", @"Art", @"Sports", @"Chinese"] objectAtIndex:directionIndex];
+}
+
+-(UIColor *)radarChart:(APRadarChart *)radarChart titleColorAtDirectionIndex:(NSInteger)directionIndex
+{
+    return [UIColor lightGrayColor];
+}
+
+-(UIFont *)radarChart:(APRadarChart *)radarChart titleFontAtDirectionIndex:(NSInteger)directionIndex
+{
+    return [UIFont systemFontOfSize:10.0];
+}
 @end

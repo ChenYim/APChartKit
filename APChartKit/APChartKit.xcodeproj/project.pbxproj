@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E60D2A1C1D517E37005EBE9F /* APRadarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = E60D2A1B1D517E37005EBE9F /* APRadarChart.m */; };
 		E6224D821D506E9200BBCC41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E6224D811D506E9200BBCC41 /* main.m */; };
 		E6224D851D506E9200BBCC41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E6224D841D506E9200BBCC41 /* AppDelegate.m */; };
 		E6224D881D506E9200BBCC41 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6224D871D506E9200BBCC41 /* ViewController.m */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E60D2A1A1D517E37005EBE9F /* APRadarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APRadarChart.h; sourceTree = "<group>"; };
+		E60D2A1B1D517E37005EBE9F /* APRadarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APRadarChart.m; sourceTree = "<group>"; };
 		E6224D7D1D506E9200BBCC41 /* APChartKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APChartKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6224D811D506E9200BBCC41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E6224D831D506E9200BBCC41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -97,16 +100,18 @@
 		E6224D971D506EA200BBCC41 /* APChartKit */ = {
 			isa = PBXGroup;
 			children = (
-				E6224D981D506EA200BBCC41 /* APBarChart.h */,
-				E6224D991D506EA200BBCC41 /* APBarChart.m */,
 				E6224D9A1D506EA200BBCC41 /* APChartColorDefine.h */,
 				E6224D9B1D506EA200BBCC41 /* APChartKit.h */,
 				E6224D9C1D506EA200BBCC41 /* APChartTools.h */,
 				E6224D9D1D506EA200BBCC41 /* APChartTools.m */,
 				E6224D9E1D506EA200BBCC41 /* APLineChart.h */,
 				E6224D9F1D506EA200BBCC41 /* APLineChart.m */,
+				E6224D981D506EA200BBCC41 /* APBarChart.h */,
+				E6224D991D506EA200BBCC41 /* APBarChart.m */,
 				E6224DA01D506EA200BBCC41 /* APPieChart.h */,
 				E6224DA11D506EA200BBCC41 /* APPieChart.m */,
+				E60D2A1A1D517E37005EBE9F /* APRadarChart.h */,
+				E60D2A1B1D517E37005EBE9F /* APRadarChart.m */,
 			);
 			path = APChartKit;
 			sourceTree = "<group>";
@@ -187,6 +192,7 @@
 				E6224DA41D506EA200BBCC41 /* APLineChart.m in Sources */,
 				E6224DA51D506EA200BBCC41 /* APPieChart.m in Sources */,
 				E6224DA21D506EA200BBCC41 /* APBarChart.m in Sources */,
+				E60D2A1C1D517E37005EBE9F /* APRadarChart.m in Sources */,
 				E6224DA31D506EA200BBCC41 /* APChartTools.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +346,7 @@
 				E6224D961D506E9200BBCC41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

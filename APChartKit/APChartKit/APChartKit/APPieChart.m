@@ -31,6 +31,8 @@
 @property (nonatomic, weak) id<APSinglePieChartAnimationDelegate> animationDeleagte;
 @property (nonatomic, strong) CAGradientLayer *gradientPieLayer;
 @property (nonatomic, strong) CAShapeLayer *pieShapeLayer;
+@property (nonatomic, strong) UILabel *markStrLabel;
+@property (nonatomic, strong) CAGradientLayer *markStrGradientLayer;
 
 @property (nonatomic, assign) CGFloat pieValue;
 @property (nonatomic, assign) CGFloat piePercent;
@@ -61,6 +63,8 @@
 - (void)startPieAnimation
 {
     self.pieShapeLayer.lineWidth = _pieWidth;
+    self.gradientPieLayer.hidden = NO;
+    self.markStrLabel.hidden = NO;
     
     // 设置动画的相关属性
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -124,31 +128,35 @@
 
 - (void)drawDotMarkStr
 {
-    UILabel *label      = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.numberOfLines = 0;
-    label.shadowColor   = [UIColor clearColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font          = _pieMarkFont;;
-    label.text          = _pieMarkTitle;
-    [label sizeToFit];
+    if (self.markStrLabel) {
+        [self.markStrLabel removeFromSuperview];
+        [self.markStrGradientLayer removeFromSuperlayer];
+    }
+    self.markStrLabel               = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.markStrLabel.numberOfLines = 0;
+    self.markStrLabel.shadowColor   = [UIColor clearColor];
+    self.markStrLabel.textAlignment = NSTextAlignmentCenter;
+    self.markStrLabel.font          = _pieMarkFont;;
+    self.markStrLabel.text          = _pieMarkTitle;
+    [self.markStrLabel sizeToFit];
     
     CGFloat frameW = self.frame.size.width;
     CGFloat frameH = self.frame.size.height;
     CGFloat midRadius = APSinglePieChart_OuterRadius - _pieWidth/2;
 
     CGPoint center = CGPointMake(self.center.x + midRadius*cos((_startAngle+_endAngle)/2), self.center.y + midRadius*sin((_startAngle+_endAngle)/2));
-    label.center = center;
-    [self addSubview:label];
+    self.markStrLabel.center = center;
+    [self addSubview:self.markStrLabel];
     
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.startPoint = CGPointMake(0, 0.0);
-    gradientLayer.endPoint = CGPointMake(1.0, 0.0);
-    gradientLayer.frame = CGRectMake(0, 0, frameW, frameH);
-    gradientLayer.colors = [self getGradientLayerColorFromDataSource:_pieMarkColor];
+    self.markStrGradientLayer = [CAGradientLayer layer];
+    self.markStrGradientLayer.startPoint = CGPointMake(0, 0.0);
+    self.markStrGradientLayer.endPoint = CGPointMake(1.0, 0.0);
+    self.markStrGradientLayer.frame = CGRectMake(0, 0, frameW, frameH);
+    self.markStrGradientLayer.colors = [self getGradientLayerColorFromDataSource:_pieMarkColor];
     
-    [self.layer addSublayer:gradientLayer];
-    gradientLayer.mask = label.layer;
-    //    label.frame = gradientLayer.bounds
+    [self.layer addSublayer:self.markStrGradientLayer];
+    self.markStrGradientLayer.mask = self.markStrLabel.layer;
+    //    self.markStrLabel.frame = gradientLayer.bounds
 }
 
 - (NSArray *)getGradientLayerColorFromDataSource:(id)color
@@ -188,7 +196,7 @@
 @property (nonatomic, strong) NSMutableArray *pieMarkColors;
 @property (nonatomic, strong) NSMutableArray *pieMarkFonts;
 
-@property (nonatomic, assign) id<APPieChartDataSource> dataSource;
+@property (nonatomic, weak) id<APPieChartDataSource> dataSource;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @end
@@ -216,6 +224,12 @@
 
 - (void)startPieAnimations
 {
+    [_pieViews enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        APSinglePieChart *singlePieChart = obj;
+        singlePieChart.gradientPieLayer.hidden = YES;
+        singlePieChart.markStrLabel.hidden = YES;
+    }];
+    
     APSinglePieChart *firstPieChart = [_pieViews firstObject];
     [firstPieChart startPieAnimation];
 }

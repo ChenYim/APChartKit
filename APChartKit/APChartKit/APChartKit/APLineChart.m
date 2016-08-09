@@ -240,6 +240,7 @@
         [linePath moveToPoint:CGPointMake(last_x1 + APLineChartContentMargin , last_y1 + APLineChartContentMargin)];
         [linePath addLineToPoint:CGPointMake(x1 + APLineChartContentMargin , y1 + APLineChartContentMargin)];
     }];
+    
     return linePath;
 }
 
@@ -337,7 +338,7 @@
 @property (nonatomic, strong) NSMutableArray *lineColors;
 @property (nonatomic, strong) NSMutableArray *lineDotMarkColors;
 @property (nonatomic, strong) NSMutableArray <APSingleChartLine *> *singChartLines;
-@property (nonatomic, assign) id<APLineChartDataSource> dataSource;
+@property (nonatomic, weak) id<APLineChartDataSource> dataSource;
 @property (nonatomic, strong) NSArray<NSString*> *horizontalTitles;
 @property (nonatomic, strong) NSArray<NSString*> *verticalTitles;
 
@@ -447,7 +448,7 @@
     }
     
     // Arrow
-//    CGFloat arrowW = MIN(offsetXLength, offsetYLength)/2;
+    // CGFloat arrowW = MIN(offsetXLength, offsetYLength)/2;
     CGPoint ptMaxXUp =  CGPointMake(frameW - offsetYLength/2, frameH - _contentMargin - offsetYLength/4);
     CGPoint ptMaxXDown =  CGPointMake(frameW - offsetYLength/2, frameH - _contentMargin + offsetYLength/4);
     CGPoint ptMaxYLeft =  CGPointMake(_contentMargin - offsetXLength/4, offsetXLength/2);

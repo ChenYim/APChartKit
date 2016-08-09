@@ -14,5 +14,6 @@
 #import "APLineChart.h"
 #import "APBarChart.h"
 #import "APPieChart.h"
+#import "APRadarChart.h"
 
 #endif /* APChartKit_h */

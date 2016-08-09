@@ -31,14 +31,15 @@
 @property (nonatomic, strong) UIFont   *dotMarkFont;
 @property (nonatomic, assign) CGFloat  dotMarkBottomMargin;
 
+// barPath
 @property (nonatomic, strong) UIBezierPath *barPath;
 @property (nonatomic, strong) UIBezierPath *barOutlinePath;
-// gradientLayer
-@property (nonatomic, strong) CAGradientLayer *barTintLayer;
-@property (nonatomic, strong) CAGradientLayer *barShadowLayer;
-// shapeLayer
-@property (nonatomic, strong) CAShapeLayer *barTintLayerMask;
-@property (nonatomic, strong) CAShapeLayer *barShadowLayerMask;
+// barGradientLayer
+@property (nonatomic, strong) CAGradientLayer *barGradientLayer;
+@property (nonatomic, strong) CAGradientLayer *barShadowGradientLayer;
+// barShapeLayer
+@property (nonatomic, strong) CAShapeLayer *barShapeLayer;
+@property (nonatomic, strong) CAShapeLayer *barShadowShapeLayer;
 @end
 
 @implementation APSingleChartBar
@@ -46,13 +47,13 @@
 // Public Method =======================================
 - (void)setup
 {
-    [self setupbarTintLayer];
+    [self setupbarGradientLayer];
     [self setupBarSharpLayer];
 }
 
 - (void)startBarAnimation
 {
-    self.barTintLayerMask.lineWidth = _barWidth;
+    self.barShapeLayer.lineWidth = _barWidth;
     
     // 设置动画的相关属性
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -62,7 +63,7 @@
     pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
     pathAnimation.delegate = self;
-    [self.barTintLayerMask addAnimation:pathAnimation forKey:@"strokeEnd"];
+    [self.barShapeLayer addAnimation:pathAnimation forKey:@"strokeEnd"];
 }
 
 // Private Method =======================================
@@ -74,22 +75,22 @@
     }
 }
 
-- (void)setupbarTintLayer
+- (void)setupbarGradientLayer
 {
-    self.barShadowLayer = [CAGradientLayer layer];
-    self.barShadowLayer.frame = self.bounds;
-    self.barShadowLayer.startPoint = CGPointMake(0, 0.0);
-    self.barShadowLayer.endPoint = CGPointMake(1.0, 0.0);
-    self.barShadowLayer.colors = [self getGradientLayerColorFromDataSource:_barShadowColor];
-    [self.layer addSublayer:self.barShadowLayer];
+    self.barShadowGradientLayer = [CAGradientLayer layer];
+    self.barShadowGradientLayer.frame = self.bounds;
+    self.barShadowGradientLayer.startPoint = CGPointMake(0, 0.0);
+    self.barShadowGradientLayer.endPoint = CGPointMake(1.0, 0.0);
+    self.barShadowGradientLayer.colors = [self getGradientLayerColorFromDataSource:_barShadowColor];
+    [self.layer addSublayer:self.barShadowGradientLayer];
     
-    // barTintLayer
-    self.barTintLayer = [CAGradientLayer layer];
-    self.barTintLayer.frame = self.bounds;
-    self.barTintLayer.startPoint = CGPointMake(0, 0.0);
-    self.barTintLayer.endPoint = CGPointMake(1.0, 0.0);
-    self.barTintLayer.colors = [self getGradientLayerColorFromDataSource:_barColor];
-    [self.layer addSublayer:self.barTintLayer];
+    // barGradientLayer
+    self.barGradientLayer = [CAGradientLayer layer];
+    self.barGradientLayer.frame = self.bounds;
+    self.barGradientLayer.startPoint = CGPointMake(0, 0.0);
+    self.barGradientLayer.endPoint = CGPointMake(1.0, 0.0);
+    self.barGradientLayer.colors = [self getGradientLayerColorFromDataSource:_barColor];
+    [self.layer addSublayer:self.barGradientLayer];
 }
 
 - (void)setupBarSharpLayer
@@ -105,13 +106,13 @@
         _barPath = nil;
     }
     
-    self.barTintLayerMask = [CAShapeLayer layer];
-    self.barTintLayerMask.path = _barPath.CGPath;
-    self.barTintLayerMask.strokeColor = APBarChartDefaultColor.CGColor;
-    self.barTintLayerMask.fillColor = [[UIColor clearColor] CGColor];
-    self.barTintLayerMask.lineWidth = 0.0;
-    self.barTintLayerMask.shouldRasterize = YES;
-    self.barTintLayer.mask = self.barTintLayerMask;
+    self.barShapeLayer = [CAShapeLayer layer];
+    self.barShapeLayer.path = _barPath.CGPath;
+    self.barShapeLayer.strokeColor = APBarChartDefaultColor.CGColor;
+    self.barShapeLayer.fillColor = [[UIColor clearColor] CGColor];
+    self.barShapeLayer.lineWidth = 0.0;
+    self.barShapeLayer.shouldRasterize = YES;
+    self.barGradientLayer.mask = self.barShapeLayer;
     
     // BarShadowPath
     UIBezierPath *barPath2 = [UIBezierPath bezierPath];
@@ -121,14 +122,14 @@
         barPath2 = nil;
     }
     
-    self.barShadowLayerMask = [CAShapeLayer layer];
-    self.barShadowLayerMask.lineWidth = _barWidth;
-    self.barShadowLayerMask.path = barPath2.CGPath;
-    self.barShadowLayerMask.strokeColor = APBarChartDefaultColor.CGColor;
-    self.barShadowLayerMask.fillColor = [[UIColor clearColor] CGColor];
-//    self.barShadowLayerMask.lineWidth = 0.0;
-    self.barShadowLayerMask.shouldRasterize = YES;
-    self.barShadowLayer.mask = self.barShadowLayerMask;
+    self.barShadowShapeLayer = [CAShapeLayer layer];
+    self.barShadowShapeLayer.lineWidth = _barWidth;
+    self.barShadowShapeLayer.path = barPath2.CGPath;
+    self.barShadowShapeLayer.strokeColor = APBarChartDefaultColor.CGColor;
+    self.barShadowShapeLayer.fillColor = [[UIColor clearColor] CGColor];
+//    self.barShadowShapeLayer.lineWidth = 0.0;
+    self.barShadowShapeLayer.shouldRasterize = YES;
+    self.barShadowGradientLayer.mask = self.barShadowShapeLayer;
     
     // BarTintOutlinePath
     self.barOutlinePath = [UIBezierPath bezierPath];
@@ -216,7 +217,7 @@
 
 @property (nonatomic, strong) NSMutableArray *barViews;
 
-@property (nonatomic, assign) id<APBarChartDataSource> dataSource;
+@property (nonatomic, weak) id<APBarChartDataSource> dataSource;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @end
@@ -331,6 +332,7 @@
         [obj removeFromSuperview];
     }];
     
+    // init vars from dataSource
     self.dataModels = [self requestDataModelsForBarChart];
     self.horizontalTitles = [self requestTitlesForHorizontalAxis];
     self.verticalTitles = [self requestTitlesForVerticalAxis];
@@ -379,6 +381,7 @@
         }
     }
     
+    // set up barViews
     self.barViews = [NSMutableArray new];
     for (NSInteger i = 0 ; i < _dataModels.count ;i++) {
         
@@ -429,7 +432,7 @@
         
         if ([barView.barOutlinePath containsPoint:touchPoint]) {
             
-            [barView.barTintLayer addTwinkleAnimationWithDuration:0.3 repeatCount:3];
+            [barView.barGradientLayer addTwinkleAnimationWithDuration:0.3 repeatCount:3];
         }
     }
 }

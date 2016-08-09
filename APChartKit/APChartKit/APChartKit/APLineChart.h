@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign) CGFloat coordinateLineW;          // default:0.5
 @property (nonatomic, strong) UIColor *coordinateColor;         // default:[UIColor grayColor]
-@property (nonatomic, strong) UIFont *coordinateFont;           // default:[UIFont systemFontOfSize:5.0]
+@property (nonatomic, strong) UIFont  *coordinateFont;           // default:[UIFont systemFontOfSize:5.0]
 @property (nonatomic, assign) CGFloat coordinateMarkRightMargin;// default:3.0
 @property (nonatomic, assign) CGFloat coordinateMarkTopMargin;  // default:3.0
 
