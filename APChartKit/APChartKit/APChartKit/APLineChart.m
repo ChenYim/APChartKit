@@ -68,6 +68,9 @@
 // shapeLayer
 @property (nonatomic, strong) CAShapeLayer *lineShapeLayer;
 @property (nonatomic, strong) CAShapeLayer *dotShapeLayer;
+
+@property (nonatomic, strong) NSMutableArray *dotMarkLayers;
+
 @end
 
 @implementation APSingleChartLine
@@ -77,9 +80,23 @@
     [self setupGradientLayers];
 }
 
+-(NSArray *)dotMarkLayers
+{
+    if (_dotMarkLayers == nil) {
+        _dotMarkLayers = [NSMutableArray new];
+    }
+    return _dotMarkLayers;
+}
+
 #pragma mark - Public Method
 
 - (void)startDrawlineChart {
+    
+    // hide dotMarks
+    [_dotMarkLayers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CAGradientLayer *layer = obj;
+        layer.hidden = YES;
+    }];
     
     // set LineWidth = 0.0 before start drawing
     self.lineShapeLayer.lineWidth = _lineWidth;
@@ -266,6 +283,15 @@
 
 - (void)drawDotMarkStr
 {
+    if (_dotMarkLayers.count > 0) {
+        // hide dotMarks
+        [_dotMarkLayers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            CAGradientLayer *layer = obj;
+            layer.hidden = NO;
+        }];
+        return;
+    }
+    
     for (NSInteger i = 0 ; i < _lineModels.count ;i++) {
         
         APLineChartDataModel *lineModel = _lineModels[i];
@@ -326,6 +352,7 @@
         [self.layer addSublayer:gradientLayer];
         gradientLayer.mask = label.layer;
         //    label.frame = gradientLayer.bounds
+        [self.dotMarkLayers addObject:gradientLayer];
     }
 }
 @end

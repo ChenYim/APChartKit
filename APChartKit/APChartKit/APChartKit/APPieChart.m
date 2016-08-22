@@ -228,7 +228,7 @@
         APSinglePieChart *singlePieChart = obj;
         singlePieChart.gradientPieLayer.hidden = YES;
         singlePieChart.markStrLabel.hidden = YES;
-        [singlePieChart.gradientPieLayer removeAllAnimations];
+        [singlePieChart.pieShapeLayer removeAllAnimations];
     }];
     
     APSinglePieChart *firstPieChart = [_pieViews firstObject];
@@ -316,6 +316,7 @@
         [self addSubview:singlePie];
         [self.pieViews addObject:singlePie];
     }
+    NSLog(@"%@",_pieViews);
 }
 
 - (void)setIsTapGestureInteractionEnabled:(BOOL)isTapGestureInteractionEnabled
@@ -403,7 +404,9 @@
     return pieTitleFont;
 }
 
--(void)singlePieChartDidFinishAnimation:(APSinglePieChart *)pieChart
+#pragma mark - APSinglePieChartAnimationDelegate
+
+- (void)singlePieChartDidFinishAnimation:(APSinglePieChart *)pieChart
 {
     NSUInteger pieChartIndex = [_pieViews indexOfObject:pieChart];
     
@@ -411,7 +414,7 @@
         return;
     }
     else if (pieChartIndex == (_pieViews.count - 1)){
-        
+        return;
     }
     else{
         APSinglePieChart *nextPieChart = [_pieViews objectAtIndex:(pieChartIndex + 1)];

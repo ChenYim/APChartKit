@@ -36,7 +36,6 @@
 - (void)setupPolygonLayer
 {
     self.shapeLayer = [CAShapeLayer layer];
-    self.shapeLayer.path = _shapeLayerPath.CGPath;
     self.shapeLayer.strokeColor = APRadarChartDefaultColor.CGColor;
     self.shapeLayer.fillColor = [APRadarChartDefaultColor CGColor];
     self.shapeLayer.lineWidth = 1.0;
@@ -47,6 +46,8 @@
 
 - (void)startAnimation
 {
+    self.shapeLayer.path = _shapeLayerPath.CGPath;
+    
     CGFloat centerX = self.frame.size.width/2;
     CGFloat centerY = self.frame.size.height/2;
     

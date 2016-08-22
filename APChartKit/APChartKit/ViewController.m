@@ -32,10 +32,10 @@
     
     // lineChart
     self.lineChar = [[APLineChart alloc] initWithFrame:CGRectZero andDataSource:self];
-//    self.lineChar.lineChartAnimarionDuration = 3.0;
+    self.lineChar.lineChartAnimarionDuration = 3.0;
 //    self.lineChar.lineChartWidth = 1.0;
-//    self.lineChar.isDotMarkDrawingEnabled = YES;
-//    self.lineChar.isTapGestureInteractionEnabled = YES;
+    self.lineChar.isDotMarkDrawingEnabled = YES;
+    self.lineChar.isTapGestureInteractionEnabled = YES;
     [self.view addSubview:_lineChar];
     
     // barChart
@@ -331,7 +331,7 @@
 
 -(NSString *)radarChart:(APRadarChart *)radarChart titleAtDirectionIndex:(NSInteger)directionIndex
 {
-    return [@[@"Math", @"Math", @"Art", @"Sports", @"Chinese"] objectAtIndex:directionIndex];
+    return [@[@"Sports", @"Math", @"Art", @"Math", @"Chinese"] objectAtIndex:directionIndex];
 }
 
 -(UIColor *)radarChart:(APRadarChart *)radarChart titleColorAtDirectionIndex:(NSInteger)directionIndex
