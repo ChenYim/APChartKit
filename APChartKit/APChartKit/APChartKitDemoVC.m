@@ -6,11 +6,11 @@
 //  Copyright © 2016年 ChenYim. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "APChartKitDemoVC.h"
 
 #import "APChartKit.h"
 
-@interface ViewController ()<APLineChartDataSource,APBarChartDataSource,APPieChartDataSource,APRadarChartDataSource>
+@interface APChartKitDemoVC ()<APLineChartDataSource,APBarChartDataSource,APPieChartDataSource,APRadarChartDataSource>
 
 @property (nonatomic, strong) NSArray<NSArray<APLineChartDataModel*>*> * lineChartDatas;
 @property (nonatomic, strong) APLineChart *lineChar;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation ViewController
+@implementation APChartKitDemoVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
