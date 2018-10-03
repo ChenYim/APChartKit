@@ -16,7 +16,7 @@
 
 #pragma mark - APSingleChartBar -
 
-@interface APSingleChartBar : UIView
+@interface APSingleChartBar : UIView <CAAnimationDelegate>
 
 @property (nonatomic, assign) CGFloat barOffsetX;
 @property (nonatomic, assign) CGFloat contentMargin;

@@ -9,7 +9,7 @@
 #import "APLineChart.h"
 #import "APChartTools.h"
 
-@interface APLineChartDataModel()
+@interface APLineChartDataModel()<CAAnimationDelegate>
 @property (nonatomic, readwrite, assign) CGFloat xValuePercent;
 @property (nonatomic, readwrite, assign) CGFloat yValuePercent;
 @property (nonatomic, readwrite, copy) NSString *dotMarkStr;
@@ -41,7 +41,7 @@
 
 #define APLineChartAnimationDuration (self.AnimationDuration)
 
-@interface APSingleChartLine : UIView
+@interface APSingleChartLine : UIView <CAAnimationDelegate>
 @property (nonatomic, strong) UIBezierPath *linePath;
 @property (nonatomic, strong) UIBezierPath *dotPath;
 
@@ -109,7 +109,7 @@
     pathAnimation.removedOnCompletion = NO;
     pathAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     pathAnimation.toValue = [NSNumber numberWithFloat:1.0f];
-//    pathAnimation.delegate = self;
+    pathAnimation.delegate = self;
     [self.lineShapeLayer addAnimation:pathAnimation forKey:@"strokeEnd"];
     
     CABasicAnimation *pointAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
